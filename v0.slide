@@ -1,0 +1,134 @@
+Amortization at Enova
+Everything I Know
+
+Aidan Coyle
+Supporting Services
+acoyle@enova.com
+
+* Amortization
+
+Take an amount, a rate, and a payment schedule and generate (roughly) equal payments from it.
+
+This process is essentially guess and check.
+
+* How Amortization Sees Loans
+
+A loan is a starting balance (split into accruing and non-accruing), a rate, and a set of payment intervals.
+
+For each payment interval, we accrue interest on the accruing balance. This interest is itself non-accruing.
+
+Payments are applied first to the non-accruing balance, then the accruing balance.
+
+We're looking for the payment amount that we can apply each period that will finish with no balance left.
+
+* Newton's Method
+
+Derivative-based method for approximating the zeros of a function
+
+.image newton.png _ 500
+.caption repeat until f(x) is 0
+
+* Bisection
+
+.code bisect.go
+
+* TILA APR
+
+Specifies how to calculate the offical APR that we include in contracts.
+
+Everything is calculated in terms of advances, payments, and unit period.
+
+* Unit Period
+
+The most common period between two transactions... with some exceptions
+
+- If the period is a month (or half, or multiple), unit period = 30, number per year = 12
+- If the period is a week (of multiple), unit period = 7, number per year = 52
+- Weird rules if you're less than a year
+
+* Finance Charge Equation (1)
+
+.image tila_defns.png _ 500
+.caption definition of terms
+
+* Finance Charge Equation (2)
+
+.image tila_eqn.png _ 800
+.caption now to solve for i
+
+* Practical Example (1)
+
+.image tila_simplified.png _ 800
+.caption we can simplify this for our loans
+
+* Practical Example (2)
+
+.image tila_example.png _ 800
+.caption here's what a calculation might look like
+
+* How Amortizer Does It
+
+Two step process
+
+- Step 1: Calculate the unit period
+- Step 2: Solve that equation with newton's method
+
+* IRR
+
+Roughly a calculation of the rate at which we're getting back money.
+
+Required to report in the UK.
+
+* Definition
+
+.image irr_defn.png _ 800
+.caption solve for r
+
+* Practical Example
+
+.image irr_example.png _ 800
+.caption here's what a calculation might look like
+
+* CNUApp
+
+- Written in Ruby (in app)
+- Uses Newton's Method
+- Does Amortization, TILA, and IRR
+- Used by CNU US
+
+* camort
+
+- Written in C (gem)
+- Uses Bisection
+- Does Amortization
+- Used by CNU UK
+
+* Martini At Zoo
+
+- Written in Ruby (gem)
+- Uses Bisection for Amortization, Newton for TILA and IRR
+- Does Amortization, TILA, IRR, and some other fun things
+- Used by 8b
+- Name is an anagram of Amortization
+- Differs from camort only on accruing interest
+
+* Amortizer
+
+- Written in Go (service)
+- Exactly the same algorithm as Martini
+- Used by 8b
+- Allows for parallel processing of loans
+
+* Questions?
+
+* Sources
+
+.link https://git.enova.com/cashnet/cnuapp_us/tree/master/cnuapp/ruby/shared/core/installments CNUapp
+.link https://git.enova.com/gems/camort camort
+.link https://git.enova.com/gems/martini_at_zoo martini_at_zoo
+.link https://git.enova.com/8b/amortizer Amortizer
+.link https://www.consumerfinance.gov/eregulations/1026-22/2015-09000#1026-22-a TILA APR Rules
+.link https://www.consumerfinance.gov/eregulations/1026-J/2014-25503_20150801#1026-J-s1 TILA APR Calculation
+.link https://en.wikipedia.org/wiki/Internal_rate_of_return IRR
+.link https://en.wikipedia.org/wiki/Newton%27s_method Newton's Method
+.link https://en.wikipedia.org/wiki/Bisection_method Bisection Method
