@@ -85,7 +85,7 @@ Calculated TILA APR: 2.80
 
 Note that we have to multiply i by the number of unit periods in a year.
 
-This number only has to be accurate to an eight of a percent.
+This number only has to be accurate to an eighth of a percent.
 
 * How Amortizer Does It
 
