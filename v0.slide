@@ -11,6 +11,19 @@ Take an amount, a rate, and a payment schedule and generate (roughly) equal paym
 
 This process is essentially guess and check.
 
+* WARNING: MATH AHEAD
+
+* An Example Loan
+
+Here's an example loan I'm going to use a bunch
+
+- Amount: $100
+- Disbursement Date: 2012-01-01
+- Payment Dates: 2012-02-01, 2012-03-01, 2012-04-01
+- Rate: 200%
+
+Amortizer Payment Amounts: 44.86, 44.86, 44.84
+
 * How Amortization Sees Loans
 
 A loan is a starting balance (split into accruing and non-accruing), a rate, and a set of payment intervals.
@@ -24,6 +37,8 @@ We're looking for the payment amount that we can apply each period that will fin
 * Newton's Method
 
 Derivative-based method for approximating the zeros of a function
+
+.image newton_graph.gif
 
 .image newton.png _ 500
 .caption repeat until f(x) is 0
@@ -43,8 +58,8 @@ Everything is calculated in terms of advances, payments, and unit period.
 The most common period between two transactions... with some exceptions
 
 - If the period is a month (or half, or multiple), unit period = 30, number per year = 12
-- If the period is a week (of multiple), unit period = 7, number per year = 52
-- Weird rules if you're less than a year
+- If the period is a week (or multiple), unit period = 7, number per year = 52
+- Weird rules for weird edge cases
 
 * Finance Charge Equation (1)
 
@@ -65,6 +80,12 @@ The most common period between two transactions... with some exceptions
 
 .image tila_example.png _ 800
 .caption here's what a calculation might look like
+
+Calculated TILA APR: 2.80
+
+Note that we have to multiply i by the number of unit periods in a year.
+
+This number only has to be accurate to an eight of a percent.
 
 * How Amortizer Does It
 
@@ -88,6 +109,8 @@ Required to report in the UK.
 
 .image irr_example.png _ 800
 .caption here's what a calculation might look like
+
+Calculated IRR: 11.49
 
 * CNUApp
 
@@ -116,6 +139,7 @@ Required to report in the UK.
 
 - Written in Go (service)
 - Exactly the same algorithm as Martini
+- Only does Amortization, Newton, and TILA
 - Used by 8b
 - Allows for parallel processing of loans
 
